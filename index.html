@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecureCore IAM Platform — Visual Diagrams & Mockups</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap');
+
+  :root {
+    --navy: #0d1b2a;
+    --blue: #1b3a6b;
+    --mid: #2e5fa3;
+    --cyan: #00b4d8;
+    --cyanl: #90e0ef;
+    --white: #f0f4f8;
+    --text: #cad6e8;
+    --card: #152234;
+    --card2: #1a2d48;
+    --border: #1e3555;
+    --green: #2ecc71;
+    --yellow: #f1c40f;
+    --red: #e74c3c;
+    --orange: #e67e22;
+    --purple: #9b59b6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: #060e18;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--cyan), var(--mid));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: white;
+  }
+  .nav-title { font-size: 15px; font-weight: 700; color: var(--white); letter-spacing: .5px; }
+  .nav-sub { font-size: 11px; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; }
+  .nav-tabs { display: flex; gap: 4px; }
+  .nav-tab {
+    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    color: var(--text); cursor: pointer; transition: all .2s;
+    border: 1px solid transparent; letter-spacing: .3px;
+  }
+  .nav-tab:hover { background: var(--card); border-color: var(--border); }
+  .nav-tab.active { background: rgba(0,180,216,.15); border-color: var(--cyan); color: var(--cyan); }
+
+  /* PAGES */
+  .page { display: none; animation: fadeIn .3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* COMMON */
+  .section-header {
+    padding: 2.5rem 2.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .section-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); font-weight: 600; margin-bottom: 6px; }
+  .section-title { font-size: 28px; font-weight: 800; color: var(--white); }
+  .section-desc { font-size: 14px; color: var(--text); margin-top: 6px; line-height: 1.6; }
+  .container { padding: 0 2.5rem 3rem; }
+
+  /* ARCHITECTURE DIAGRAM */
+  .arch-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 12px; max-width: 1000px; margin: 0 auto;
+  }
+  .arch-layer {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  .arch-layer-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .arch-layer-body {
+    padding: 16px 20px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+    background: rgba(255,255,255,.02);
+  }
+  .arch-component {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+    min-width: 140px; flex: 1;
+    transition: border-color .2s, transform .2s;
+    cursor: default;
+  }
+  .arch-component:hover { border-color: var(--cyan); transform: translateY(-2px); }
+  .comp-name { font-size: 13px; font-weight: 700; color: var(--white); }
+  .comp-tech { font-size: 11px; color: var(--cyan); font-family: 'JetBrains Mono', monospace; }
+  .comp-role { font-size: 11px; color: #8899aa; margin-top: 2px; }
+  .arch-arrow {
+    display: flex; align-items: center; justify-content: center;
+    padding: 4px 0; gap: 8px; color: var(--cyan); font-size: 20px;
+  }
+  .arch-arrow-label { font-size: 11px; color: #88aabb; letter-spacing: .5px; }
+
+  .layer-presentation .arch-layer-header { background: rgba(0,180,216,.12); color: var(--cyan); }
+  .layer-auth .arch-layer-header { background: rgba(46,95,163,.2); color: #7aadff; }
+  .layer-service .arch-layer-header { background: rgba(155,89,182,.15); color: #c39bd3; }
+  .layer-data .arch-layer-header { background: rgba(46,204,113,.12); color: #7dcea0; }
+  .layer-monitoring .arch-layer-header { background: rgba(231,76,60,.12); color: #f1948a; }
+
+  
+  /* INCIDENT RESPONSE */
+  .ir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 900px; margin: 0 auto; }
+  .ir-card {
+    border-radius: 10px; border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform .2s, border-color .2s;
+  }
+  .ir-card:hover { transform: translateY(-3px); border-color: rgba(0,180,216,.4); }
+  .ir-card-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+  }
+  .ir-phase {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+  .ir-card-title { font-size: 14px; font-weight: 700; color: var(--white); }
+  .ir-card-body { padding: 12px 16px; background: rgba(255,255,255,.02); }
+  .ir-card-desc { font-size: 12px; color: #8899aa; line-height: 1.6; }
+  .ir-sla { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; }
+  .p1 .ir-card-header { background: rgba(231,76,60,.12); }
+  .p1 .ir-phase { background: rgba(231,76,60,.2); color: #e74c3c; }
+  .p2 .ir-card-header { background: rgba(230,126,34,.1); }
+  .p2 .ir-phase { background: rgba(230,126,34,.2); color: #e67e22; }
+  .p3 .ir-card-header { background: rgba(241,196,15,.08); }
+  .p3 .ir-phase { background: rgba(241,196,15,.15); color: #f1c40f; }
+  .p4 .ir-card-header { background: rgba(46,204,113,.08); }
+  .p4 .ir-phase { background: rgba(46,204,113,.15); color: #2ecc71; }
+
+  /* MONITORING DIAGRAM */
+  .monitoring-pipeline {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; max-width: 1100px; margin: 0 auto;
+    position: relative;
+  }
+  .mon-stage {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+  .mon-stage-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    border: 2px solid;
+    position: relative; z-index: 2;
+    transition: transform .2s;
+  }
+  .mon-stage:hover .mon-stage-icon { transform: scale(1.1); }
+  .mon-stage-line {
+    position: absolute; top: 32px; left: 50%; right: -50%;
+    height: 2px; background: linear-gradient(90deg, var(--cyan), transparent);
+    z-index: 1;
+  }
+  .mon-stage:last-child .mon-stage-line { display: none; }
+  .mon-stage-label { font-size: 12px; font-weight: 700; color: var(--white); margin-top: 12px; text-align: center; }
+  .mon-stage-sub { font-size: 10px; color: #8899aa; text-align: center; margin-top: 4px; line-height: 1.4; }
+  .mon-stage-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; padding: 2px 8px; border-radius: 20px; }
+
+  /* ADMIN DASHBOARD MOCKUP */
+  .mockup-frame {
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .mockup-titlebar {
+    background: #060e18;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #28c840; }
+  .mockup-url {
+    flex: 1; background: var(--card); border-radius: 4px;
+    padding: 4px 12px; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: #8899aa; margin: 0 12px;
+  }
+
+  .dash-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 600px; }
+  .dash-sidebar {
+    background: #0b1623;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .dash-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .dash-logo-text { font-size: 16px; font-weight: 800; color: var(--white); }
+  .dash-logo-sub { font-size: 10px; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase; }
+  .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
+  .sidebar-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #445566; padding: 0 8px; margin-bottom: 4px; font-weight: 700; }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 6px;
+    font-size: 12px; color: #8899aa;
+    cursor: pointer; transition: all .15s;
+    margin-bottom: 2px;
+  }
+  .sidebar-item:hover { background: var(--card); color: var(--text); }
+  .sidebar-item.active { background: rgba(0,180,216,.12); color: var(--cyan); }
+  .sidebar-item .icon { width: 16px; text-align: center; font-size: 13px; }
+  .sidebar-badge { margin-left: auto; background: #e74c3c; color: white; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 10px; }
+  .sidebar-badge.yellow { background: var(--yellow); color: #000; }
+
+  .dash-main { padding: 24px; overflow: auto; }
+  .dash-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .dash-page-title { font-size: 20px; font-weight: 800; color: var(--white); }
+  .dash-page-sub { font-size: 12px; color: #8899aa; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .alert-bell { position: relative; cursor: pointer; }
+  .alert-bell .bell-icon { font-size: 18px; color: #8899aa; }
+  .alert-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: var(--red); border-radius: 50%; border: 1px solid var(--navy); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan), var(--mid)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+    position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .kpi-card.cyan::before { background: var(--cyan); }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card.yellow::before { background: var(--yellow); }
+  .kpi-card.red::before { background: var(--red); }
+  .kpi-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #8899aa; font-weight: 700; }
+  .kpi-value { font-size: 28px; font-weight: 800; color: var(--white); margin: 6px 0 4px; font-family: 'JetBrains Mono', monospace; }
+  .kpi-change { font-size: 11px; }
+  .kpi-change.up { color: var(--green); }
+  .kpi-change.down { color: var(--red); }
+  .kpi-change.neutral { color: #8899aa; }
+  .kpi-icon { position: absolute; top: 14px; right: 14px; font-size: 22px; opacity: .2; }
+
+  .dash-grid2 { display: grid; grid-template-columns: 1fr 340px; gap: 16px; margin-bottom: 16px; }
+  .dash-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .dash-card-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .dash-card-title { font-size: 13px; font-weight: 700; color: var(--white); }
+  .dash-card-body { padding: 16px; }
+
+  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+  .bar-group { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    transition: opacity .2s;
+    cursor: pointer;
+  }
+  .bar:hover { opacity: .8; }
+  .bar-label { font-size: 9px; color: #667788; }
+
+  .activity-list { display: flex; flex-direction: column; gap: 8px; }
+  .activity-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 6px;
+    background: rgba(255,255,255,.02);
+    border: 1px solid transparent;
+    transition: border-color .15s;
+  }
+  .activity-item:hover { border-color: var(--border); }
+  .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .activity-content { flex: 1; }
+  .activity-title { font-size: 11px; color: var(--white); font-weight: 600; }
+  .activity-sub { font-size: 10px; color: #8899aa; }
+  .activity-time { font-size: 10px; color: #556677; font-family: 'JetBrains Mono', monospace; }
+
+  .user-table { width: 100%; border-collapse: collapse; }
+  .user-table th { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #8899aa; font-weight: 700; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .user-table td { padding: 10px 10px; font-size: 12px; color: var(--text); border-bottom: 1px solid rgba(30,53,85,.5); }
+  .user-table tr:last-child td { border-bottom: none; }
+  .user-table tr:hover td { background: rgba(255,255,255,.02); }
+  .status-pill { padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; display: inline-block; }
+  .status-pill.active { background: rgba(46,204,113,.15); color: var(--green); }
+  .status-pill.inactive { background: rgba(231,76,60,.12); color: var(--red); }
+  .status-pill.pending { background: rgba(241,196,15,.12); color: var(--yellow); }
+
+  /* RBAC VISUAL */
+  .rbac-visual { max-width: 900px; margin: 0 auto; }
+  .rbac-header-row { display: grid; grid-template-columns: 200px repeat(6, 1fr); gap: 8px; margin-bottom: 8px; }
+  .rbac-role-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: center; color: var(--text); padding: 6px 4px; border-radius: 6px; }
+  .rbac-row { display: grid; grid-template-columns: 200px repeat(6, 1fr); gap: 8px; margin-bottom: 6px; align-items: center; }
+  .rbac-permission { font-size: 11px; color: var(--text); padding: 6px 10px; background: var(--card); border-radius: 6px; border: 1px solid var(--border); }
+  .rbac-cell { display: flex; align-items: center; justify-content: center; height: 32px; border-radius: 6px; font-size: 14px; }
+  .rbac-full { background: rgba(46,204,113,.15); color: var(--green); border: 1px solid rgba(46,204,113,.2); }
+  .rbac-partial { background: rgba(241,196,15,.1); color: var(--yellow); border: 1px solid rgba(241,196,15,.2); }
+  .rbac-none { background: rgba(255,255,255,.02); color: #334455; border: 1px solid var(--border); }
+
+  /* TAGS */
+  .tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; }
+  .tag.cyan { background: rgba(0,180,216,.12); color: var(--cyan); border: 1px solid rgba(0,180,216,.2); }
+  .tag.green { background: rgba(46,204,113,.12); color: var(--green); border: 1px solid rgba(46,204,113,.2); }
+  .tag.red { background: rgba(231,76,60,.12); color: var(--red); border: 1px solid rgba(231,76,60,.2); }
+
+  /* GRID UTILITIES */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  
+
+  /* PRINT helper */
+  .print-note {
+    text-align: center; padding: 12px;
+    font-size: 11px; color: #556677;
+    background: rgba(0,0,0,.3);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">SC</div>
+    <div>
+      <div class="nav-title">SecureCore IAM</div>
+      <div class="nav-sub">Visual Diagrams & Mockups</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    
+    
+    
+    <div class="nav-tab" onclick="showPage('monitoring')">Monitoring Flow</div>
+    <div class="nav-tab" onclick="showPage('dashboard')">Admin Dashboard</div>
+    <div class="nav-tab" onclick="showPage('rbac')">RBAC Matrix</div>
+  </div>
+</nav>
+
+
+
+<!-- ===== MONITORING ===== -->
+<div class="page" id="page-monitoring">
+  <div class="section-header">
+    <div class="section-label">Diagram 4</div>
+    <div class="section-title">Security Monitoring & Logging Flow</div>
+    <div class="section-desc">End-to-end log pipeline from event source through SIEM correlation to alerting and long-term archival.</div>
+  </div>
+  <div class="container">
+    <div class="monitoring-pipeline">
+      <div class="mon-stage">
+        <div class="mon-stage-line"></div>
+        <div class="mon-stage-icon" style="background:rgba(0,180,216,.12);border-color:var(--cyan);color:var(--cyan)">📋</div>
+        <div class="mon-stage-label">Event Sources</div>
+        <div class="mon-stage-sub">Auth · API · RBAC · Admin · System Health</div>
+        <div class="mon-stage-badge" style="background:rgba(0,180,216,.15);color:var(--cyan)">JSON Structured</div>
+      </div>
+      <div class="mon-stage">
+        <div class="mon-stage-line"></div>
+        <div class="mon-stage-icon" style="background:rgba(155,89,182,.12);border-color:var(--purple);color:var(--purple)">🔄</div>
+        <div class="mon-stage-label">Log Aggregation</div>
+        <div class="mon-stage-sub">Fluentd agents → Logstash parsing & enrichment</div>
+        <div class="mon-stage-badge" style="background:rgba(155,89,182,.15);color:var(--purple)">Fluentd + Logstash</div>
+      </div>
+      <div class="mon-stage">
+        <div class="mon-stage-line"></div>
+        <div class="mon-stage-icon" style="background:rgba(241,196,15,.1);border-color:var(--yellow);color:var(--yellow)">🧠</div>
+        <div class="mon-stage-label">Correlation Engine</div>
+        <div class="mon-stage-sub">Wazuh rules · threat detection · anomaly scoring</div>
+        <div class="mon-stage-badge" style="background:rgba(241,196,15,.12);color:var(--yellow)">Wazuh SIEM</div>
+      </div>
+      <div class="mon-stage">
+        <div class="mon-stage-line"></div>
+        <div class="mon-stage-icon" style="background:rgba(231,76,60,.1);border-color:var(--red);color:var(--red)">🚨</div>
+        <div class="mon-stage-label">Alert Routing</div>
+        <div class="mon-stage-sub">PagerDuty · Slack · Email · JIRA tickets</div>
+        <div class="mon-stage-badge" style="background:rgba(231,76,60,.12);color:var(--red)">By Severity</div>
+      </div>
+      <div class="mon-stage">
+        <div class="mon-stage-icon" style="background:rgba(46,204,113,.1);border-color:var(--green);color:var(--green)">📦</div>
+        <div class="mon-stage-label">Retention & Archive</div>
+        <div class="mon-stage-sub">Hot 90d · Warm 1yr · Cold Archive 7yr</div>
+        <div class="mon-stage-badge" style="background:rgba(46,204,113,.12);color:var(--green)">Encrypted</div>
+      </div>
+    </div>
+    <div style="margin-top:40px">
+      <div class="three-col">
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">📊 Tracked Event Types</div></div>
+          <div class="dash-card-body">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Authentication Events</div><div class="activity-sub">Logins, failures, MFA, token refresh</div></div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Access Control Events</div><div class="activity-sub">Permission grants, denials, role changes</div></div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--yellow)"></div><div class="activity-content"><div class="activity-title">Administrative Actions</div><div class="activity-sub">User creation, config changes, escalations</div></div></div>
+              <div class="activity-item"><div class="activity-dot" style="background:var(--red)"></div><div class="activity-content"><div class="activity-title">Threat Indicators</div><div class="activity-sub">Brute force, impossible travel, anomalies</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">⏱ Alert SLAs by Severity</div></div>
+          <div class="dash-card-body">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></div><div style="flex:1;font-size:12px;color:var(--white);font-weight:600">P1 — Critical</div><div style="font-size:11px;color:var(--red);font-family:'JetBrains Mono',monospace">15 min</div></div>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0"></div><div style="flex:1;font-size:12px;color:var(--white);font-weight:600">P2 — High</div><div style="font-size:11px;color:var(--orange);font-family:'JetBrains Mono',monospace">1 hr</div></div>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0"></div><div style="flex:1;font-size:12px;color:var(--white);font-weight:600">P3 — Medium</div><div style="font-size:11px;color:var(--yellow);font-family:'JetBrains Mono',monospace">4 hr</div></div>
+              <div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="flex:1;font-size:12px;color:var(--white);font-weight:600">P4 — Low</div><div style="font-size:11px;color:var(--green);font-family:'JetBrains Mono',monospace">24 hr</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><div class="dash-card-title">🗃 Retention Schedule</div></div>
+          <div class="dash-card-body">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="background:rgba(0,180,216,.08);border:1px solid rgba(0,180,216,.2);border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--cyan);font-weight:700;letter-spacing:1px;text-transform:uppercase">Hot Storage</div><div style="font-size:20px;font-weight:800;color:var(--white);font-family:'JetBrains Mono',monospace">90 Days</div><div style="font-size:10px;color:#8899aa">Elasticsearch · Searchable</div></div>
+              <div style="background:rgba(155,89,182,.08);border:1px solid rgba(155,89,182,.2);border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--purple);font-weight:700;letter-spacing:1px;text-transform:uppercase">Warm Archive</div><div style="font-size:20px;font-weight:800;color:var(--white);font-family:'JetBrains Mono',monospace">1 Year</div><div style="font-size:10px;color:#8899aa">Compressed · Indexed</div></div>
+              <div style="background:rgba(46,204,113,.06);border:1px solid rgba(46,204,113,.15);border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:1px;text-transform:uppercase">Cold Archive</div><div style="font-size:20px;font-weight:800;color:var(--white);font-family:'JetBrains Mono',monospace">7 Years</div><div style="font-size:10px;color:#8899aa">Encrypted Immutable</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN DASHBOARD MOCKUP ===== -->
+<div class="page" id="page-dashboard">
+  <div class="section-header">
+    <div class="section-label">Mockup — Admin Dashboard</div>
+    <div class="section-title">Administrative Control Panel</div>
+    <div class="section-desc">High-fidelity mockup of the SecureCore Admin Dashboard showing real-time KPIs, user activity, and recent security events.</div>
+  </div>
+  <div class="container">
+    <div class="mockup-frame">
+      <div class="mockup-titlebar">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <div class="mockup-url">🔒 https://admin.securecore.internal/dashboard</div>
+        <div style="font-size:11px;color:#556677">Secure · TLS 1.3</div>
+      </div>
+      <div class="dash-layout">
+        <div class="dash-sidebar">
+          <div class="dash-logo">
+            <div class="dash-logo-text">SecureCore</div>
+            <div class="dash-logo-sub">Admin Console</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Overview</div>
+            <div class="sidebar-item active"><div class="icon">📊</div>Dashboard</div>
+            <div class="sidebar-item"><div class="icon">🔔</div>Alerts<div class="sidebar-badge">3</div></div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Identity</div>
+            <div class="sidebar-item"><div class="icon">👥</div>Users</div>
+            <div class="sidebar-item"><div class="icon">🔑</div>Roles & Permissions</div>
+            <div class="sidebar-item"><div class="icon">⚙️</div>Access Requests<div class="sidebar-badge yellow">7</div></div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Security</div>
+            <div class="sidebar-item"><div class="icon">📋</div>Audit Logs</div>
+            <div class="sidebar-item"><div class="icon">🛡️</div>Incidents</div>
+            <div class="sidebar-item"><div class="icon">🔍</div>SIEM Events</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">System</div>
+            <div class="sidebar-item"><div class="icon">⚡</div>Health Monitor</div>
+            <div class="sidebar-item"><div class="icon">🗄️</div>Backups</div>
+            <div class="sidebar-item"><div class="icon">⚙️</div>Configuration</div>
+          </div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-topbar">
+            <div>
+              <div class="dash-page-title">Security Dashboard</div>
+              <div class="dash-page-sub">Last updated: Live · April 16, 2026 · 09:42 AM EST</div>
+            </div>
+            <div class="topbar-right">
+              <div class="tag green">● All Systems Operational</div>
+              <div class="alert-bell"><div class="bell-icon">🔔</div><div class="alert-dot"></div></div>
+              <div class="avatar">JA</div>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card cyan"><div class="kpi-icon">👤</div><div class="kpi-label">Active Users</div><div class="kpi-value">1,284</div><div class="kpi-change up">↑ 12 this week</div></div>
+            <div class="kpi-card green"><div class="kpi-icon">✅</div><div class="kpi-label">Auth Success Rate</div><div class="kpi-value">99.2%</div><div class="kpi-change up">↑ 0.3% vs last week</div></div>
+            <div class="kpi-card yellow"><div class="kpi-icon">⚠️</div><div class="kpi-label">Open Incidents</div><div class="kpi-value">3</div><div class="kpi-change neutral">2 P3 · 1 P4</div></div>
+            <div class="kpi-card red"><div class="kpi-icon">🚫</div><div class="kpi-label">Failed Logins (24h)</div><div class="kpi-value">47</div><div class="kpi-change down">↑ 8 vs yesterday</div></div>
+          </div>
+          <div class="dash-grid2">
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <div class="dash-card-title">Authentication Events — Last 7 Days</div>
+                <div class="tag cyan">Live</div>
+              </div>
+              <div class="dash-card-body">
+                <div class="chart-bars">
+                  <div class="bar-group"><div class="bar" style="height:72px;background:linear-gradient(180deg,#00b4d8,#1b3a6b)"></div><div class="bar-label">Mon</div></div>
+                  <div class="bar-group"><div class="bar" style="height:88px;background:linear-gradient(180deg,#00b4d8,#1b3a6b)"></div><div class="bar-label">Tue</div></div>
+                  <div class="bar-group"><div class="bar" style="height:64px;background:linear-gradient(180deg,#00b4d8,#1b3a6b)"></div><div class="bar-label">Wed</div></div>
+                  <div class="bar-group"><div class="bar" style="height:96px;background:linear-gradient(180deg,#00b4d8,#1b3a6b)"></div><div class="bar-label">Thu</div></div>
+                  <div class="bar-group"><div class="bar" style="height:80px;background:linear-gradient(180deg,#00b4d8,#1b3a6b)"></div><div class="bar-label">Fri</div></div>
+                  <div class="bar-group"><div class="bar" style="height:32px;background:linear-gradient(180deg,#2e5fa3,#0d1b2a)"></div><div class="bar-label">Sat</div></div>
+                  <div class="bar-group"><div class="bar" style="height:28px;background:linear-gradient(180deg,#2e5fa3,#0d1b2a)"></div><div class="bar-label">Sun</div></div>
+                </div>
+                <div style="display:flex;gap:16px;margin-top:12px">
+                  <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:var(--cyan)"></div><div style="font-size:11px;color:#8899aa">Successful Logins</div></div>
+                  <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#e74c3c"></div><div style="font-size:11px;color:#8899aa">Failed Attempts</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="dash-card">
+              <div class="dash-card-header"><div class="dash-card-title">Recent Activity</div></div>
+              <div class="dash-card-body">
+                <div class="activity-list">
+                  <div class="activity-item"><div class="activity-dot" style="background:var(--red)"></div><div class="activity-content"><div class="activity-title">5 failed logins — jsmith@co.com</div><div class="activity-sub">Account locked · Analyst notified</div></div><div class="activity-time">9:38</div></div>
+                  <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">New user onboarded</div><div class="activity-sub">m.johnson@co.com · Role: Analyst</div></div><div class="activity-time">9:21</div></div>
+                  <div class="activity-item"><div class="activity-dot" style="background:var(--yellow)"></div><div class="activity-content"><div class="activity-title">Access request pending</div><div class="activity-sub">c.lee@co.com · Elevated DB access</div></div><div class="activity-time">9:14</div></div>
+                  <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Role updated</div><div class="activity-sub">t.garcia → Senior Analyst permissions</div></div><div class="activity-time">8:55</div></div>
+                  <div class="activity-item"><div class="activity-dot" style="background:var(--red)"></div><div class="activity-content"><div class="activity-title">User offboarded</div><div class="activity-sub">k.white@co.com · All sessions revoked</div></div><div class="activity-time">8:30</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-header"><div class="dash-card-title">User Directory — Recent</div><div class="tag cyan">1,284 Total</div></div>
+            <div class="dash-card-body">
+              <table class="user-table">
+                <thead><tr><th>NAME</th><th>EMAIL</th><th>ROLE</th><th>DEPT</th><th>LAST LOGIN</th><th>STATUS</th></tr></thead>
+                <tbody>
+                  <tr><td>Maria Johnson</td><td>m.johnson@co.com</td><td>Analyst</td><td>IT Security</td><td>Today 9:21</td><td><span class="status-pill active">Active</span></td></tr>
+                  <tr><td>Carlos Lee</td><td>c.lee@co.com</td><td>DB Admin</td><td>Engineering</td><td>Today 8:44</td><td><span class="status-pill pending">Pending MFA</span></td></tr>
+                  <tr><td>Janet Smith</td><td>jsmith@co.com</td><td>Analyst</td><td>Finance</td><td>Today 9:38</td><td><span class="status-pill inactive">Locked</span></td></tr>
+                  <tr><td>Tom Garcia</td><td>t.garcia@co.com</td><td>Sr. Analyst</td><td>IT Security</td><td>Today 8:55</td><td><span class="status-pill active">Active</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RBAC MATRIX ===== -->
+<div class="page" id="page-rbac">
+  <div class="section-header">
+    <div class="section-label">Diagram 5</div>
+    <div class="section-title">RBAC Permission Matrix</div>
+    <div class="section-desc">Visual permissions matrix showing which roles have access to which system capabilities. Green = full access, Yellow = read-only, Gray = no access.</div>
+  </div>
+  <div class="container">
+    <div class="rbac-visual">
+      <div class="rbac-header-row">
+        <div></div>
+        <div class="rbac-role-label" style="background:rgba(231,76,60,.1);color:#e74c3c">Sys Admin</div>
+        <div class="rbac-role-label" style="background:rgba(231,76,60,.08);color:#e67e22">Sec Admin</div>
+        <div class="rbac-role-label" style="background:rgba(241,196,15,.08);color:#f1c40f">HR Admin</div>
+        <div class="rbac-role-label" style="background:rgba(241,196,15,.06);color:#f1c40f">Manager</div>
+        <div class="rbac-role-label" style="background:rgba(46,204,113,.08);color:#2ecc71">Std User</div>
+        <div class="rbac-role-label" style="background:rgba(0,180,216,.08);color:var(--cyan)">Auditor</div>
+      </div>
+      <div id="rbac-rows"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:20px;justify-content:center">
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:24px;border-radius:4px;background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px">✓</div><div style="font-size:12px;color:#8899aa">Full Access</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:24px;border-radius:4px;background:rgba(241,196,15,.1);border:1px solid rgba(241,196,15,.25);display:flex;align-items:center;justify-content:center;color:var(--yellow);font-size:12px">~</div><div style="font-size:12px;color:#8899aa">Read Only</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,.02);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:#334455;font-size:12px">✗</div><div style="font-size:12px;color:#8899aa">No Access</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESILIENCE ===== -->
+<div class="page" id="page-resilience">
+  <div class="section-header">
+    <div class="section-label">Diagram 6</div>
+    <div class="section-title">System Resilience & Recovery</div>
+    <div class="section-desc">Recovery flow from failure detection through validated restoration. Platform designed for RTO ≤ 4 hours, RPO ≤ 1 hour.</div>
+  </div>
+  <div class="container">
+    <div class="res-timeline">
+      <div class="res-step">
+        <div class="res-connector"></div>
+        <div class="res-step-icon" style="background:rgba(231,76,60,.12);border-color:var(--red);color:var(--red)">⚡</div>
+        <div class="res-step-label">Detection</div>
+        <div class="res-step-desc">Health checks every 30s. K8s liveness probes.</div>
+      </div>
+      <div class="res-step">
+        <div class="res-connector"></div>
+        <div class="res-step-icon" style="background:rgba(230,126,34,.1);border-color:var(--orange);color:var(--orange)">🔄</div>
+        <div class="res-step-label">Auto Failover</div>
+        <div class="res-step-desc">LB reroutes. Redis Sentinel promotes replica.</div>
+      </div>
+      <div class="res-step">
+        <div class="res-connector"></div>
+        <div class="res-step-icon" style="background:rgba(241,196,15,.08);border-color:var(--yellow);color:var(--yellow)">📦</div>
+        <div class="res-step-label">Backup Activation</div>
+        <div class="res-step-desc">Daily full + hourly incremental. Checksum verified.</div>
+      </div>
+      <div class="res-step">
+        <div class="res-connector"></div>
+        <div class="res-step-icon" style="background:rgba(0,180,216,.1);border-color:var(--cyan);color:var(--cyan)">🔧</div>
+        <div class="res-step-label">Restore</div>
+        <div class="res-step-desc">Data restored. Integrity checks run. No corruption.</div>
+      </div>
+      <div class="res-step">
+        <div class="res-connector"></div>
+        <div class="res-step-icon" style="background:rgba(155,89,182,.1);border-color:var(--purple);color:var(--purple)">🧪</div>
+        <div class="res-step-label">Validate</div>
+        <div class="res-step-desc">Smoke tests: auth, RBAC, logging all verified.</div>
+      </div>
+      <div class="res-step">
+        <div class="res-step-icon" style="background:rgba(46,204,113,.1);border-color:var(--green);color:var(--green)">✅</div>
+        <div class="res-step-label">Restored</div>
+        <div class="res-step-desc">Monitoring elevated 72hr. Dual admin approval active.</div>
+      </div>
+    </div>
+    <div class="res-metrics">
+      <div class="res-metric"><div class="res-metric-val">4h</div><div class="res-metric-label">Recovery Time Objective (RTO)</div></div>
+      <div class="res-metric"><div class="res-metric-val">1h</div><div class="res-metric-label">Recovery Point Objective (RPO)</div></div>
+      <div class="res-metric"><div class="res-metric-val">99.9%</div><div class="res-metric-label">Target Uptime SLA</div></div>
+      <div class="res-metric"><div class="res-metric-val">90d</div><div class="res-metric-label">Quarterly DR Drill Cycle</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="print-note">AccessGaurd — Capstone Final Mockup/div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Build RBAC matrix dynamically
+  const permissions = [
+    ["User Management (Create/Delete)", "full","none","full","none","none","none"],
+    ["User Management (View)", "full","full","full","full","none","full"],
+    ["Role Assignment", "full","partial","none","none","none","none"],
+    ["Security Policy Config", "full","full","none","none","none","none"],
+    ["Audit Log Access", "full","full","none","none","none","full"],
+    ["Incident Response Actions", "full","full","none","none","none","none"],
+    ["SIEM Dashboard", "full","full","none","none","none","full"],
+    ["Backup & Recovery", "full","none","none","none","none","none"],
+    ["System Configuration", "full","none","none","none","none","none"],
+    ["Self-Service Portal", "full","full","full","full","full","none"],
+    ["Access Requests (Submit)", "full","full","full","full","full","none"],
+    ["Access Requests (Approve)", "full","none","none","full","none","none"],
+    ["Compliance Reports", "full","full","none","none","none","full"],
+    ["Secrets / Vault Access", "full","none","none","none","none","none"],
+  ];
+
+  const container = document.getElementById('rbac-rows');
+  permissions.forEach((row, i) => {
+    const div = document.createElement('div');
+    div.className = 'rbac-row';
+    const label = document.createElement('div');
+    label.className = 'rbac-permission';
+    label.textContent = row[0];
+    div.appendChild(label);
+    for (let j = 1; j < row.length; j++) {
+      const cell = document.createElement('div');
+      cell.className = 'rbac-cell ' + (row[j] === 'full' ? 'rbac-full' : row[j] === 'partial' ? 'rbac-partial' : 'rbac-none');
+      cell.textContent = row[j] === 'full' ? '✓' : row[j] === 'partial' ? '~' : '✗';
+      div.appendChild(cell);
+    }
+    container.appendChild(div);
+  });
+
+  // Set default page on refresh
+window.addEventListener('DOMContentLoaded', () => {
+  showPage('dashboard');
+
+  // also highlight the correct nav tab manually
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab')[1].classList.add('active'); // Admin Dashboard tab
+});
+</script>
+</body>
+</html>
