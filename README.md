@@ -10,6 +10,7 @@ The main goal of this structure is to get rid of the the manual internevntion wi
 
 The system operates using an event-driven architecture where changes in employee status within the HR system trigger automated workflows.
 
+<img src='Dashboard.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 ---
 
 ## Key Components
@@ -99,3 +100,4 @@ By automating critical lifecycle processes and enforcing strong security control
 ---
 
 **IT Capstone 1 Project — Florida International University**
+
