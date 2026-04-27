@@ -1,6 +1,6 @@
 # Project Overview
 
-This project aims to provide users with a compreheince autmated IT Onbaording and Offboarding system that is created to streamline the lifecycle f the employee management within a certain organization. This system utilized the Human Resources (HR) proceccess with the IT operations to allows for efficient user access and the ability to deporivison effectively and securely.
+This project aims to provide users with a compreheince autmated IT Onbaording and Offboarding system that is created to streamline the lifecycle of the employee management within a certain organization. This system utilized the Human Resources (HR) proceccess with the IT operations to allows for efficient user access and the ability to deporivison effectively and securely.
 
 The main goal of this structure is to get rid of the the manual internevntion within account management while still maintaining auditability, enforcing secure security controls and improving operational efficiency.
 
